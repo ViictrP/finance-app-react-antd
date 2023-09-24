@@ -47,6 +47,7 @@ const LoginPage = () => {
       <Form
         form={form}
         name="login"
+        autoComplete='true'
         layout="vertical"
         onFinish={onFinish}>
         <Form.Item<LoginDTO>
@@ -55,6 +56,7 @@ const LoginPage = () => {
           rules={[{ required: true, message: 'O e-mail é obrigatório!' }]}
         >
           <Input
+            name='email'
             size="large"
             placeholder="E-mail"
             allowClear={true}
@@ -67,6 +69,7 @@ const LoginPage = () => {
           rules={[{ required: true, message: 'A senha é obrigatória!' }]}
         >
           <Input
+            name='password'
             type="password"
             size="large"
             placeholder="Senha"
