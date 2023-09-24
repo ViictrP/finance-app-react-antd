@@ -5,7 +5,7 @@ import { getUserProfileThunk } from '../thunks';
 import { useSelector } from 'react-redux';
 
 interface UserSlice {
-  profile?: UserDTO | null;
+  profile?: UserDTO;
   isLoadingProfile: boolean;
 }
 
@@ -26,13 +26,13 @@ export const userSlice = createSlice({
       state.isLoadingProfile = true;
     });
 
-    builder.addCase(getUserProfileThunk.fulfilled, (state, action: any) => {
+    builder.addCase(getUserProfileThunk.fulfilled, (state, action: PayloadAction<UserDTO>) => {
       state.profile = action.payload;
       state.isLoadingProfile = false;
     });
 
     builder.addCase(getUserProfileThunk.rejected, state => {
-      state.profile = null;
+      state.profile = undefined;
       state.isLoadingProfile = false;
     });
   }
