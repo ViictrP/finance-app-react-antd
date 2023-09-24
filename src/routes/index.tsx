@@ -1,12 +1,13 @@
 import PublicRoutes from './PublicRoutes.tsx';
 import SecuredRoutes from './SecuredRoutes.tsx';
+import { useAuth } from '../context/AuthContext.tsx';
 
 const Routes = () => {
-  const signed = true;
+  const { signedIn } = useAuth();
 
   return (
     <>
-      { signed ? <SecuredRoutes /> : <PublicRoutes /> }
+      { signedIn ? <SecuredRoutes /> : <PublicRoutes /> }
     </>
   );
 };
