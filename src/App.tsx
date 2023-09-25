@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import Routes from './routes';
 import { useCookies } from 'react-cookie';
 import { useSelector } from 'react-redux';

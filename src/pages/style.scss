@@ -1,0 +1,35 @@
+.home-card {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: rgb(204 204 204 / 30%);
+  padding: 16px;
+}
+
+.balance-card {
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+
+.home-card > .ant-space-item {
+  width: 100%;
+}
+
+.graphs-card {
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  margin-bottom: 30px;
+}
+
+.graph-item {
+  height: 132px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+}
+
+.graph {
+  background-color: #5f799d;
+  width: 30px;
+}
