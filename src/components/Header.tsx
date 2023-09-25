@@ -1,36 +1,34 @@
-import { useUserSelector } from '../stores/slices/user.slice.ts';
 import { useAuth } from '../context/AuthContext.tsx';
-import { Button, Space, Typography } from 'antd';
+import { Button, Space } from 'antd';
+import { useUserSelector } from '../stores/slices/user.slice.ts';
+import { MenuOutlined } from '@ant-design/icons';
 
 const Header = () => {
   const { profile: user } = useUserSelector();
   const { logout } = useAuth();
-  const currencyFormat = (num: number) => {
-    return (
-      'R$' + num
-        .toFixed(2)
-        .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-        .replace('.', ',')
-        .replace(',', '.')
-    );
-  };
 
   return (
     <Space
       direction='horizontal'
-      align='baseline'
-      style={{ display: 'flex', justifyContent: 'space-between' }}
+      align='center'
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+      }}
     >
-      <Typography.Title level={4}>
-        Olá {user?.name}!
-        <Typography.Paragraph>
-          salário&nbsp;
-          <Typography.Text type='secondary'>
-            {currencyFormat(Number(user?.salary ?? 0))}
-          </Typography.Text>
-        </Typography.Paragraph>
-      </Typography.Title>
-      <Button type='link' size='large' onClick={logout}>sair</Button>
+      <Button
+        size='large'
+        type='text'
+        icon={<MenuOutlined />}>
+        <span style={{fontWeight: 'bold'}}>{user?.name}</span>
+      </Button>
+      <Button
+        type='link'
+        size='large'
+        onClick={logout}>
+        sair
+      </Button>
     </Space>
   );
 }
