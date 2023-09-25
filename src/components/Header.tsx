@@ -1,11 +1,11 @@
-import { useAuth } from '../context/AuthContext.tsx';
-import { Button, Space } from 'antd';
-import { useUserSelector } from '../stores/slices/user.slice.ts';
-import { MenuOutlined } from '@ant-design/icons';
+import {Button, Space} from 'antd';
+import {useUserSelector} from '../stores/slices/user.slice.ts';
+import {MenuOutlined} from '@ant-design/icons';
+import {useAuth} from "../context/hooks";
 
 const Header = () => {
-  const { profile: user } = useUserSelector();
-  const { logout } = useAuth();
+  const {profile: user} = useUserSelector();
+  const {logout} = useAuth();
 
   return (
     <Space
@@ -20,7 +20,7 @@ const Header = () => {
       <Button
         size='large'
         type='text'
-        icon={<MenuOutlined />}>
+        icon={<MenuOutlined/>}>
         <span style={{fontWeight: 'bold'}}>{user?.name}</span>
       </Button>
       <Button

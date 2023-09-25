@@ -1,16 +1,16 @@
-import { Button, Form, Input, message, notification, Space, Typography } from 'antd';
-import Icon, { LockOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import {Button, Form, Input, message, notification, Space, Typography} from 'antd';
+import Icon, {LockOutlined, LoginOutlined, UserOutlined} from '@ant-design/icons';
+import {useState} from 'react';
 import Panda from '../assets/panda.svg?react';
-import { LoginDTO } from '../dto';
-import { useAuth } from '../context/AuthContext.tsx';
-import { LoginError } from '../errors';
+import {LoginDTO} from '../dto';
+import {LoginError} from '../errors';
+import {useAuth} from "../context/hooks";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm<LoginDTO>();
   const fields = Form.useWatch([], form);
-  const { authenticate } = useAuth();
+  const {authenticate} = useAuth();
 
   const enterLoading = (isLoading: boolean) => {
     setLoading(() => isLoading);
@@ -53,20 +53,20 @@ const LoginPage = () => {
         <Form.Item<LoginDTO>
           name='email'
           hasFeedback
-          rules={[{ required: true, message: 'O e-mail é obrigatório!' }]}
+          rules={[{required: true, message: 'O e-mail é obrigatório!'}]}
         >
           <Input
             name='email'
             size="large"
             placeholder="E-mail"
             allowClear={true}
-            prefix={<UserOutlined />}
+            prefix={<UserOutlined/>}
           />
         </Form.Item>
         <Form.Item<LoginDTO>
           name='password'
           hasFeedback
-          rules={[{ required: true, message: 'A senha é obrigatória!' }]}
+          rules={[{required: true, message: 'A senha é obrigatória!'}]}
         >
           <Input
             name='password'
@@ -74,7 +74,7 @@ const LoginPage = () => {
             size="large"
             placeholder="Senha"
             allowClear={true}
-            prefix={<LockOutlined />}
+            prefix={<LockOutlined/>}
           />
         </Form.Item>
         <Form.Item>
@@ -83,7 +83,7 @@ const LoginPage = () => {
             size="large"
             type={!fields?.email || !fields?.password ? 'dashed' : 'primary'}
             htmlType="submit"
-            icon={<LoginOutlined />}
+            icon={<LoginOutlined/>}
             loading={loading}
             disabled={!fields?.email || !fields?.password}
           >
@@ -92,9 +92,9 @@ const LoginPage = () => {
         </Form.Item>
       </Form>
       <Space align="baseline">
-        <Icon component={() => <Panda />}></Icon>
+        <Icon component={() => <Panda/>}></Icon>
         <Typography.Text type="secondary">
-          Finance App 1.0.0 <br /> copyright 2023
+          Finance App 1.0.0 <br/> copyright 2023
         </Typography.Text>
       </Space>
     </Space>
