@@ -23,16 +23,12 @@ const LoginPage = () => {
     });
   };
 
-  const onFinish = async (values: LoginDTO) => {
-    try {
-      enterLoading(true);
-      await authenticate(values);
-      message.success('Bem-vindo(a)!');
-    } catch (err) {
-      openNotificationWithIcon((err as LoginError).message)
-    } finally {
-      enterLoading(false);
-    }
+  const onFinish = (values: LoginDTO) => {
+    enterLoading(true);
+    authenticate(values)
+      .then(() => message.success('Bem-vindo(a)!'))
+      .catch((err) => openNotificationWithIcon((err as LoginError).message))
+      .finally(() => enterLoading(false));
   };
 
   return (
@@ -49,7 +45,7 @@ const LoginPage = () => {
         name="login"
         autoComplete='true'
         layout="vertical"
-        onFinish={onFinish}>
+        onFinish={(values) => onFinish(values)}>
         <Form.Item<LoginDTO>
           name='email'
           hasFeedback

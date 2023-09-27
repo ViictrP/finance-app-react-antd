@@ -19,7 +19,7 @@ function App() {
       axios.defaults.headers.common['x-authentication-token'] = `${cookies.accessToken}`;
       dispatch(userApiActions.getUserProfileThunk());
     }
-  }, [signedIn]);
+  }, [signedIn, cookies.accessToken, dispatch, userStored.isLoadingProfile]);
 
   return <Routes/>
 }
