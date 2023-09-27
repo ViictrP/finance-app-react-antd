@@ -1,11 +1,18 @@
 import {Button, Space} from 'antd';
-import {useUserSelector} from '../stores/slices/user.slice.ts';
+import {userActions, useUserSelector} from '../stores/slices/user.slice.ts';
 import {MenuOutlined} from '@ant-design/icons';
 import {useAuth} from "../context/hooks";
+import {useAppDispatch} from "../app/hook.ts";
 
 const Header = () => {
   const {profile: user} = useUserSelector();
+  const dispatch = useAppDispatch();
   const {logout} = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    dispatch(userActions.clearProfile());
+  };
 
   return (
     <Space
@@ -26,7 +33,7 @@ const Header = () => {
       <Button
         type='link'
         size='large'
-        onClick={logout}>
+        onClick={() => handleLogout()}>
         sair
       </Button>
     </Space>

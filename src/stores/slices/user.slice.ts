@@ -17,6 +17,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    clearProfile: (state) => {
+      state.profile = undefined;
+    },
     setIsLoadingProfile: (state, action: PayloadAction<boolean>) => {
       state.isLoadingProfile = action.payload;
     },
