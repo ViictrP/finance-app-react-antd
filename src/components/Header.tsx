@@ -1,43 +1,34 @@
-import {Button, Space} from 'antd';
-import {userActions, useUserSelector} from '../stores/slices/user.slice.ts';
-import {MenuOutlined} from '@ant-design/icons';
-import {useAuth} from "../context/hooks";
-import {useAppDispatch} from "../app/hook.ts";
+import { Avatar, Button, Space } from 'antd';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Header = () => {
-  const {profile: user} = useUserSelector();
-  const dispatch = useAppDispatch();
-  const {logout} = useAuth();
-
-  const handleLogout = () => {
-    logout();
-    dispatch(userActions.clearProfile());
-  };
+  const { logout, user } = useAuth0();
 
   return (
     <Space
-      direction='horizontal'
-      align='center'
+      direction="horizontal"
+      align="center"
       style={{
         display: 'flex',
         justifyContent: 'space-between',
         marginBottom: 20,
       }}
     >
+      <Space size="small">
+        <Avatar src={user?.picture} alt={user?.name} />
+        <span style={{ fontWeight: 'bold' }}>{user?.name}</span>
+      </Space>
       <Button
-        size='large'
-        type='text'
-        icon={<MenuOutlined/>}>
-        <span style={{fontWeight: 'bold'}}>{user?.name}</span>
-      </Button>
-      <Button
-        type='link'
-        size='large'
-        onClick={() => handleLogout()}>
+        type="link"
+        size="large"
+        onClick={() =>
+          logout({ logoutParams: { returnTo: window.location.origin } })
+        }
+      >
         sair
       </Button>
     </Space>
   );
-}
+};
 
 export default Header;

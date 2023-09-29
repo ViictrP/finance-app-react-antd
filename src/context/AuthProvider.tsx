@@ -1,4 +1,3 @@
-import {ReactNode} from "react";
 import {useCookies} from "react-cookie";
 import {LoginDTO} from "../dto";
 import {AccessToken} from "./data";
@@ -8,7 +7,7 @@ import AuthContext from "./AuthContext.tsx";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const AuthProvider = ({children}: { children: ReactNode}) => {
+const AuthProvider = ({children}) => {
     const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
 
     const authenticate = async (user: LoginDTO): Promise<AccessToken> => {

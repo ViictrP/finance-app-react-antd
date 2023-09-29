@@ -8,10 +8,10 @@ import BalanceIcon from '../assets/balance.svg?react';
 
 const { Text, Paragraph, Title } = Typography;
 
-interface Graph {
+type Graph = {
   month: string;
   value: number;
-}
+};
 
 const HomePage = () => {
   const { profile: user } = useUserSelector();
