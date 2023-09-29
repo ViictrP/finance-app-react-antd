@@ -5,8 +5,8 @@ const SecuredRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<HomePage />} />
-        <Route path='*' element={<NotFoundPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

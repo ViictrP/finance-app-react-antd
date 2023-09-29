@@ -4,6 +4,12 @@ import { useAuth0 } from '@auth0/auth0-react';
 const Header = () => {
   const { logout, user } = useAuth0();
 
+  const logoutHandler = () => {
+    logout({ logoutParams: { returnTo: window.location.origin } }).then(() =>
+      console.log('logged out')
+    );
+  };
+
   return (
     <Space
       direction="horizontal"
@@ -18,13 +24,7 @@ const Header = () => {
         <Avatar src={user?.picture} alt={user?.name} />
         <span style={{ fontWeight: 'bold' }}>{user?.name}</span>
       </Space>
-      <Button
-        type="link"
-        size="large"
-        onClick={() =>
-          logout({ logoutParams: { returnTo: window.location.origin } })
-        }
-      >
+      <Button type="link" size="large" onClick={() => logoutHandler()}>
         sair
       </Button>
     </Space>

@@ -16,7 +16,7 @@ const OAuth0LoginPage = () => {
 
   useEffect(() => {
     getAccessTokenSilently().then((accessToken) => {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     });
   }, [getAccessTokenSilently]);
 

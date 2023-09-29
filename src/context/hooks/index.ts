@@ -1,5 +1,3 @@
-import useAuth from "./use-auth.hook.ts";
+import useAuth from './use-auth.hook.ts';
 
-export {
-  useAuth
-}
+export { useAuth };
