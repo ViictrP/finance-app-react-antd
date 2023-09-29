@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import '../window.mock';
 import { fireEvent, render } from '@testing-library/react';
-import Header from '../../src/components/Header';
+import { Header } from '../../src/components';
 import { useAuth0, User } from '@auth0/auth0-react';
 
 jest.mock('@auth0/auth0-react', () => ({ useAuth0: jest.fn() }));
