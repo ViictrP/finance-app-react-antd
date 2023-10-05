@@ -18,6 +18,7 @@ const OAuth0LoginPage = () => {
     getAccessTokenSilently({
       authorizationParams: {audience: import.meta.env.VITE_AUTH0_AUDIENCE as string}
     }).then((accessToken) => {
+      console.log('Here the token {}', accessToken);
       axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     });
   }, [getAccessTokenSilently]);

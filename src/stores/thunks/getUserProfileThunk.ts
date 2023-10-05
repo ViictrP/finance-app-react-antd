@@ -7,7 +7,6 @@ const getUserProfileThunk = createAsyncThunk(
   'get/userProfile',
   async (_, thunkApi) => {
     try {
-      console.log('getting user profile {}', axios.defaults.headers.common);
       const response = await api.get<UserDTO>('/me', {
         headers: axios.defaults.headers.common,
       });
