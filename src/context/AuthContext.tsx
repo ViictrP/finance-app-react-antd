@@ -1,5 +1,5 @@
-import {createContext} from 'react';
-import {AuthContextData} from './data';
+import { createContext } from 'react';
+import { AuthContextData } from './data';
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 

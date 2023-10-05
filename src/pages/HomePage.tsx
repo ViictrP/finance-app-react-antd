@@ -5,24 +5,13 @@ import { Input, Space, Typography } from 'antd';
 import { currencyFormatter } from '../helper';
 import Icon, { SearchOutlined } from '@ant-design/icons';
 import BalanceIcon from '../assets/balance.svg?react';
+import { MonthClosureDTO } from '../dto';
 
 const { Text, Paragraph, Title } = Typography;
-
-interface Graph {
-  month: string;
-  value: number;
-}
 
 const HomePage = () => {
   const { profile: user } = useUserSelector();
   const salary = Number(user?.salary);
-  const graps: Graph[] = [
-    { month: 'mai', value: 8333 },
-    { month: 'jun', value: 13766 },
-    { month: 'jul', value: 7787 },
-    { month: 'ago', value: 13687 },
-    { month: 'set', value: 6987 },
-  ];
 
   console.log('rendering');
 
@@ -59,18 +48,22 @@ const HomePage = () => {
       </Space>
     </Space>
   );
-  const GraphItem = ({ graph }: { graph: Graph }) => (
+  const GraphItem = ({ monthClosure }: { monthClosure: MonthClosureDTO }) => (
     <>
       <Space className="graph-item" direction="vertical" align="center">
         <div
           className="graph"
           style={{
-            height: ((graph.value / salary) * 100).toFixed(2) + 'px',
+            height:
+              ((Number(monthClosure.expenses) / salary) * 100).toFixed(2) +
+              'px',
           }}
         />
         <div>
-          <Text strong>{graph.month}</Text> <br />
-          <Text strong>{(graph.value / 1000).toFixed(2)}k</Text>
+          <Text strong>{monthClosure.month}</Text> <br />
+          <Text strong>
+            {(Number(monthClosure.expenses) / 1000).toFixed(2)}k
+          </Text>
         </div>
       </Space>
     </>
@@ -81,8 +74,8 @@ const HomePage = () => {
       className="home-card graphs-card"
       align="center"
     >
-      {graps.map((graph) => (
-        <GraphItem key={graph.month} graph={graph} />
+      {user?.monthClosures.map((monthClosure) => (
+        <GraphItem key={monthClosure.month} monthClosure={monthClosure} />
       ))}
     </Space>
   );
