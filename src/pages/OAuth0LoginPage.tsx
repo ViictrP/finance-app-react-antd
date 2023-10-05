@@ -1,5 +1,5 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { useEffect } from 'react';
+import {useAuth0} from '@auth0/auth0-react';
+import {useEffect} from 'react';
 import axios from 'axios';
 
 const OAuth0LoginPage = () => {
@@ -15,7 +15,10 @@ const OAuth0LoginPage = () => {
   }
 
   useEffect(() => {
-    getAccessTokenSilently().then((accessToken) => {
+    getAccessTokenSilently({
+      cacheMode: 'off',
+      authorizationParams: {audience: import.meta.env.VITE_AUTH0_AUDIENCE as string}
+    }).then((accessToken) => {
       axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     });
   }, [getAccessTokenSilently]);
