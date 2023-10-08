@@ -62,6 +62,10 @@ describe('Header', () => {
       user: null,
     }));
 
+    useUserSelectMock.mockImplementation(() => ({
+      authUser: null,
+    }));
+
     const { queryByText, queryByAltText } = render(wrapInProvider(<Header />));
 
     expect(queryByAltText('user-avatar')).not.toBeInTheDocument();
