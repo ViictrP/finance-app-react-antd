@@ -1,22 +1,45 @@
 import { useCookies } from 'react-cookie';
-import { LoginDTO } from '../dto';
-import { AccessToken } from './data';
-import { login } from '../features';
-import axios from 'axios';
 import AuthContext from './AuthContext.tsx';
+import { ReactNode } from 'react';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  UserCredential,
+} from 'firebase/auth';
+import axios from 'axios';
+import { Catch, Finally, Then } from './data/auth-context.data.ts';
+import { LoginError } from '../errors';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+interface AuthUser {
+  accessToken: string;
+}
+
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
 
-  const authenticate = async (user: LoginDTO): Promise<AccessToken> => {
-    const { data } = await login(user);
-    axios.defaults.headers.common[
-      'x-authentication-token'
-    ] = `${data.accessToken}`;
-    setCookie('accessToken', data.accessToken);
-    return { accessToken: data.accessToken };
+  const authenticate = (
+    thenCb?: Then,
+    catchCb?: Catch,
+    finallyCb?: Finally
+  ) => {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((token: UserCredential) => {
+        const user = token.user as unknown as AuthUser;
+        axios.defaults.headers.common.Authorization = `Bearer ${user.accessToken}`;
+        setCookie('accessToken', user.accessToken);
+        if (thenCb) {
+          thenCb({
+            name: token.user.displayName,
+            email: token.user.email,
+            photoUrl: token.user.photoURL,
+          });
+        }
+      })
+      .catch((error) => catchCb && catchCb(error as LoginError))
+      .finally(() => finallyCb && finallyCb());
   };
 
   const logout = () => {

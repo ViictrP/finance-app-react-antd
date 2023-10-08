@@ -1,11 +1,11 @@
 import PublicRoutes from './PublicRoutes.tsx';
 import SecuredRoutes from './SecuredRoutes.tsx';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth } from '../context/hooks';
 
 const Routes = () => {
-  const { isAuthenticated } = useAuth0();
+  const { signedIn } = useAuth();
 
-  return <>{isAuthenticated ? <SecuredRoutes /> : <PublicRoutes />}</>;
+  return <>{signedIn ? <SecuredRoutes /> : <PublicRoutes />}</>;
 };
 
 export default Routes;

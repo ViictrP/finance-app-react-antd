@@ -1,16 +1,21 @@
 import './App.scss';
 import Routes from './routes';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useAppDispatch } from './app/hook.ts';
-import { userApiActions } from './stores/slices/user.slice.ts';
+import { userApiActions, useUserSelector } from './stores/slices/user.slice.ts';
+import { useAuth } from './context/hooks';
+import { useEffect } from 'react';
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { signedIn } = useAuth();
+  const userStored = useUserSelector();
   const dispatch = useAppDispatch();
 
-  if (isAuthenticated && !isLoading) {
-    dispatch(userApiActions.getUserProfileThunk());
-  }
+  useEffect(() => {
+    if (signedIn && !userStored.isLoadingProfile) {
+      dispatch(userApiActions.getUserProfileThunk());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signedIn]);
 
   return <Routes />;
 }

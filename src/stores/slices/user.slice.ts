@@ -4,8 +4,15 @@ import { UserDTO } from '../../dto';
 import { getUserProfileThunk } from '../thunks';
 import { useSelector } from 'react-redux';
 
+export interface AuthUser {
+  email?: string | null;
+  photoUrl?: string | null;
+  name?: string | null;
+}
+
 interface UserSlice {
   profile?: UserDTO;
+  authUser?: AuthUser;
   isLoadingProfile: boolean;
 }
 
@@ -19,6 +26,9 @@ export const userSlice = createSlice({
   reducers: {
     setIsLoadingProfile: (state, action: PayloadAction<boolean>) => {
       state.isLoadingProfile = action.payload;
+    },
+    setAuthUser: (state, action: PayloadAction<AuthUser>) => {
+      state.authUser = action.payload;
     },
   },
   extraReducers: (builder) => {

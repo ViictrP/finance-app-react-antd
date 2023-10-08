@@ -9,7 +9,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
   ],
-  ignorePatterns: ['dist', 'test', '.eslintrc.cjs', 'jest.config.cjs'],
+  ignorePatterns: ['config','dist', 'test', '.eslintrc.cjs', 'jest.config.cjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
@@ -28,6 +28,7 @@ module.exports = {
     '@typescript-eslint/no-unsafe-call': 0,
     '@typescript-eslint/no-unsafe-assignment': 0,
     '@typescript-eslint/no-unsafe-member-access': 0,
-    '@typescript-eslint/no-unsafe-return': 0
+    '@typescript-eslint/no-unsafe-return': 0,
+    '@typescript-eslint/no-misused-promises': 0,
   },
 };
