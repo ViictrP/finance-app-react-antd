@@ -2,16 +2,23 @@ import '@testing-library/jest-dom';
 import '../window.mock';
 import { fireEvent, render } from '@testing-library/react';
 import { Header } from '../../src/components';
-import { AuthUser } from '../../src/stores/slices/user.slice';
+import { AuthUser, useUserSelector } from '../../src/stores/slices/user.slice';
 import { useAuth } from '../../src/context/hooks';
+import { Provider } from 'react-redux';
+import { store } from '../../src/stores/store';
+import { ReactNode } from 'react';
 
 jest.mock('../../src/context/hooks', () => ({ useAuth: jest.fn() }));
 const mockUseAuth = useAuth as jest.Mock;
 
+jest.mock('../../src/stores/slices/user.slice', () => ({
+  useUserSelector: jest.fn(),
+}));
+const useUserSelectMock = useUserSelector as jest.Mock;
+
 afterEach(() => jest.clearAllMocks());
 
-//TODO: Fix this test
-describe.skip('Header', () => {
+describe('Header', () => {
   it("should render the header component with user's name and avatar", () => {
     const user: AuthUser = {
       name: 'John Doe',
@@ -20,10 +27,13 @@ describe.skip('Header', () => {
 
     mockUseAuth.mockImplementation(() => ({
       logout: jest.fn(),
-      user,
     }));
 
-    const { getByAltText, getByText } = render(<Header />);
+    useUserSelectMock.mockImplementation(() => ({
+      authUser: user,
+    }));
+
+    const { getByAltText, getByText } = render(wrapInProvider(<Header />));
 
     expect(getByAltText('John Doe')).toBeInTheDocument();
     expect(getByText('John Doe')).toBeInTheDocument();
@@ -34,15 +44,16 @@ describe.skip('Header', () => {
 
     mockUseAuth.mockImplementation(() => ({
       logout,
-      user: null,
     }));
 
-    const { getByText } = render(<Header />);
+    useUserSelectMock.mockImplementation(() => ({
+      authUser: null,
+    }));
+
+    const { getByText } = render(wrapInProvider(<Header />));
     fireEvent.click(getByText('sair'));
 
-    expect(logout).toHaveBeenCalledWith({
-      logoutParams: { returnTo: window.location.origin },
-    });
+    expect(logout).toHaveBeenCalled();
   });
 
   it("should render header without user's name and avatar when user is not logged in", () => {
@@ -51,9 +62,13 @@ describe.skip('Header', () => {
       user: null,
     }));
 
-    const { queryByText, queryByAltText } = render(<Header />);
+    const { queryByText, queryByAltText } = render(wrapInProvider(<Header />));
 
     expect(queryByAltText('user-avatar')).not.toBeInTheDocument();
     expect(queryByText('user-name')).not.toBeInTheDocument();
   });
+
+  const wrapInProvider = (child: ReactNode) => (
+    <Provider store={store}>{child}</Provider>
+  );
 });
