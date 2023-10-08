@@ -14,6 +14,7 @@ function App() {
     if (signedIn && !userStored.isLoadingProfile) {
       dispatch(userApiActions.getUserProfileThunk());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signedIn]);
 
   return <Routes />;

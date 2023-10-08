@@ -38,7 +38,7 @@ const LoginPage = () => {
     });
   };
 
-  const loggedInHandler = async (user: AuthUser) => {
+  const loggedInHandler = (user: AuthUser) => {
     message.success('Bem-vindo(a)!');
     dispatch(
       userActions.setAuthUser({
