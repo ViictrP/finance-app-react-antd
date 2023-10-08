@@ -8,6 +8,7 @@ import {
   Typography,
 } from 'antd';
 import Icon, {
+  GoogleOutlined,
   LockOutlined,
   LoginOutlined,
   UserOutlined,
@@ -15,14 +16,16 @@ import Icon, {
 import { useState } from 'react';
 import Panda from '../assets/panda.svg?react';
 import { LoginDTO } from '../dto';
-import { LoginError } from '../errors';
 import { useAuth } from '../context/hooks';
+import { AuthUser, userActions } from '../stores/slices/user.slice.ts';
+import { useAppDispatch } from '../app/hook.ts';
 
 const LoginPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm<LoginDTO>();
   const fields = Form.useWatch([], form);
   const { authenticate } = useAuth();
+  const dispatch = useAppDispatch();
 
   const enterLoading = (isLoading: boolean) => {
     setLoading(() => isLoading);
@@ -35,12 +38,30 @@ const LoginPage = () => {
     });
   };
 
+  const loggedInHandler = async (user: AuthUser) => {
+    message.success('Bem-vindo(a)!');
+    dispatch(
+      userActions.setAuthUser({
+        name: user?.name,
+        email: user.email,
+        photoUrl: user?.photoUrl,
+      })
+    );
+  };
+
+  const authenticateWithGoogle = () => {
+    enterLoading(true);
+    authenticate(
+      loggedInHandler,
+      (err) => openNotificationWithIcon(err.message),
+      () => enterLoading(false)
+    );
+  };
+
   const onFinish = (values: LoginDTO) => {
     enterLoading(true);
-    authenticate(values)
-      .then(() => message.success('Bem-vindo(a)!'))
-      .catch((err) => openNotificationWithIcon((err as LoginError).message))
-      .finally(() => enterLoading(false));
+    console.log(values);
+    enterLoading(false);
   };
 
   return (
@@ -100,6 +121,17 @@ const LoginPage = () => {
           </Button>
         </Form.Item>
       </Form>
+      <Typography.Text>Ou</Typography.Text>
+      <Button
+        size="large"
+        style={{ width: '100%' }}
+        type="default"
+        icon={<GoogleOutlined />}
+        loading={loading}
+        onClick={() => authenticateWithGoogle()}
+      >
+        Accesse com google!
+      </Button>
       <Space align="baseline">
         <Icon component={() => <Panda />}></Icon>
         <Typography.Text type="secondary">

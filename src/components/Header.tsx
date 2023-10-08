@@ -1,14 +1,10 @@
 import { Avatar, Button, Space } from 'antd';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth } from '../context/hooks';
+import { useUserSelector } from '../stores/slices/user.slice.ts';
 
 const Header = () => {
-  const { logout, user } = useAuth0();
-
-  const logoutHandler = () => {
-    logout({ logoutParams: { returnTo: window.location.origin } }).then(() =>
-      console.log('logged out')
-    );
-  };
+  const { authUser } = useUserSelector();
+  const { logout } = useAuth();
 
   return (
     <Space
@@ -21,10 +17,13 @@ const Header = () => {
       }}
     >
       <Space size="small">
-        <Avatar src={user?.picture} alt={user?.name} />
-        <span style={{ fontWeight: 'bold' }}>{user?.name}</span>
+        <Avatar
+          src={authUser?.photoUrl}
+          alt={authUser?.name ?? 'profile picture'}
+        />
+        <span style={{ fontWeight: 'bold' }}>{authUser?.name}</span>
       </Space>
-      <Button type="link" size="large" onClick={() => logoutHandler()}>
+      <Button type="link" size="large" onClick={() => logout()}>
         sair
       </Button>
     </Space>
