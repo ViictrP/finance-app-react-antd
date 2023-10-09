@@ -19,6 +19,7 @@ import { LoginDTO } from '../dto';
 import { useAuth } from '../context/hooks';
 import { AuthUser, userActions } from '../stores/slices/user.slice.ts';
 import { useAppDispatch } from '../app/hook.ts';
+import {useCookies} from "react-cookie";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -26,6 +27,7 @@ const LoginPage = () => {
   const fields = Form.useWatch([], form);
   const { authenticate } = useAuth();
   const dispatch = useAppDispatch();
+  const [_, setCookie] = useCookies(['userPic']);
 
   const enterLoading = (isLoading: boolean) => {
     setLoading(() => isLoading);
@@ -40,6 +42,7 @@ const LoginPage = () => {
 
   const loggedInHandler = (user: AuthUser) => {
     message.success('Bem-vindo(a)!');
+    setCookie('userPic', user.photoUrl, { path: '/' });
     dispatch(
       userActions.setAuthUser({
         name: user?.name,

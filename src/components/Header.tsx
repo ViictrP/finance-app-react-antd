@@ -1,9 +1,11 @@
 import { Avatar, Button, Space } from 'antd';
 import { useAuth } from '../context/hooks';
 import { useUserSelector } from '../stores/slices/user.slice.ts';
+import {useCookies} from "react-cookie";
 
 const Header = () => {
-  const { authUser } = useUserSelector();
+  const { authUser, profile } = useUserSelector();
+  const [cookie] = useCookies(['userPic']);
   const { logout } = useAuth();
 
   return (
@@ -18,10 +20,10 @@ const Header = () => {
     >
       <Space size="small">
         <Avatar
-          src={authUser?.photoUrl}
+          src={authUser?.photoUrl ?? cookie.userPic}
           alt={authUser?.name ?? 'profile picture'}
         />
-        <span style={{ fontWeight: 'bold' }}>{authUser?.name}</span>
+        <span style={{ fontWeight: 'bold' }}>{profile?.name ?? authUser?.name ?? 'carregando'}</span>
       </Space>
       <Button type="link" size="large" onClick={() => logout()}>
         sair

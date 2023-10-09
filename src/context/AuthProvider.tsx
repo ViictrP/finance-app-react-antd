@@ -1,15 +1,10 @@
-import { useCookies } from 'react-cookie';
+import {useCookies} from 'react-cookie';
 import AuthContext from './AuthContext.tsx';
-import { ReactNode } from 'react';
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  UserCredential,
-} from 'firebase/auth';
-import axios from 'axios';
-import { Catch, Finally, Then } from './data/auth-context.data.ts';
-import { LoginError } from '../errors';
+import {ReactNode} from 'react';
+import {getAuth, GoogleAuthProvider, signInWithPopup, UserCredential,} from 'firebase/auth';
+import {Catch, Finally, Then} from './data/auth-context.data.ts';
+import {LoginError} from '../errors';
+import {api} from "../lib";
 
 interface AuthUser {
   accessToken: string;
@@ -28,7 +23,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     signInWithPopup(auth, provider)
       .then((token: UserCredential) => {
         const user = token.user as unknown as AuthUser;
-        axios.defaults.headers.common.Authorization = `Bearer ${user.accessToken}`;
+        api.defaults.headers.common.Authorization = `Bearer ${user.accessToken}`;
         setCookie('accessToken', user.accessToken);
         if (thenCb) {
           thenCb({
