@@ -27,7 +27,7 @@ const LoginPage = () => {
   const fields = Form.useWatch([], form);
   const { authenticate } = useAuth();
   const dispatch = useAppDispatch();
-  const [_, setCookie] = useCookies(['userPic']);
+  const [, setCookie] = useCookies(['userPic']);
 
   const enterLoading = (isLoading: boolean) => {
     setLoading(() => isLoading);
