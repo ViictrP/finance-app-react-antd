@@ -1,4 +1,4 @@
-import currencyMasker from './currency.masker.ts';
+import { currencyMasker } from '../../src/helper';
 
 describe('CurrencyMasker', () => {
   it('Should return masked and number', () => {
