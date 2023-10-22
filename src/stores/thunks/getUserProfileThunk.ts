@@ -1,7 +1,7 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
-import {api} from '../../lib';
-import {UserDTO} from '../../dto';
-import {notification} from "antd";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { api } from '../../lib';
+import { UserDTO } from '../../dto';
+import { notification } from 'antd';
 
 const getUserProfileThunk = createAsyncThunk(
   'get/userProfile',
@@ -16,7 +16,8 @@ const getUserProfileThunk = createAsyncThunk(
       );
       notification.error({
         message: 'Erro ao buscar perfil',
-        description: 'Não foi possível obter o perfil do usuário. Tente novamente mais tarde.',
+        description:
+          'Não foi possível obter o perfil do usuário. Tente novamente mais tarde.',
       });
       return thunkApi.rejectWithValue(error);
     }

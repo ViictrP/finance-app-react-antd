@@ -18,7 +18,19 @@
 .graphs-card {
   border-bottom-left-radius: 30px;
   border-bottom-right-radius: 30px;
+}
+
+.transactions-card, .graphs-card, .credit-cards-card {
   margin-bottom: 30px;
+}
+
+.credit-cards-card {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.credit-cards-card::-webkit-scrollbar {
+  display: none;
 }
 
 .graph-item {

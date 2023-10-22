@@ -1,19 +1,60 @@
 import './style.scss';
 import Header from '../components/Header.tsx';
 import { useUserSelector } from '../stores/slices/user.slice.ts';
-import { Input, Space, Typography } from 'antd';
+import { Button, Input, Space, Typography } from 'antd';
 import { currencyFormatter } from '../helper';
 import Icon, { SearchOutlined } from '@ant-design/icons';
 import BalanceIcon from '../assets/balance.svg?react';
-import { MonthClosureDTO } from '../dto';
+import { MonthClosureDTO, RecurringExpenseDTO, TransactionDTO } from '../dto';
+import { useCallback, useEffect, useState } from 'react';
 
 const { Text, Paragraph, Title } = Typography;
 
 const HomePage = () => {
+  const [availableBalance, setAvailableBalance] = useState<number>(0);
+  const [increasePercentage, setIncreasePercentage] = useState<number>(0);
   const { profile: user } = useUserSelector();
   const salary = Number(user?.salary);
 
-  console.log('rendering');
+  const calculateAvailableBalance = useCallback(() => {
+    const { creditCards, recurringExpenses, transactions } = user!;
+    const transactionsTotal = transactions.reduce(reduceIntoTotal, 0);
+    const recurringExpensesTotal = recurringExpenses.reduce(reduceIntoTotal, 0);
+    const creditCardsTotal = creditCards.reduce((sum, current) => {
+      const invoice = current.invoices[0];
+      const amount = invoice
+        ? invoice.transactions.reduce((sum, current) => {
+            return sum + Number(current.amount);
+          }, 0)
+        : 0;
+      return sum + Number(amount);
+    }, 0);
+    return (
+      salary - creditCardsTotal - recurringExpensesTotal - transactionsTotal
+    );
+  }, [salary, user]);
+
+  const reduceIntoTotal = (
+    acc: number,
+    curr: TransactionDTO | RecurringExpenseDTO
+  ) => acc + Number(curr.amount);
+
+  useEffect(() => {
+    if (user) {
+      const availableBalance = calculateAvailableBalance();
+      setAvailableBalance(() => availableBalance);
+      const lastMonthAvailableBalance =
+        user.monthClosures[user.monthClosures.length - 1].available;
+
+      const lastMonthAvailableBalanceDifference =
+        availableBalance - lastMonthAvailableBalance;
+      const percentage = (
+        (lastMonthAvailableBalanceDifference / availableBalance) *
+        100
+      ).toFixed(2);
+      setIncreasePercentage(() => Number(percentage));
+    }
+  }, [calculateAvailableBalance, user]);
 
   const Balance = () => (
     <Space
@@ -29,9 +70,9 @@ const HomePage = () => {
           Saldo do mês
           <br />
           <Text style={{ fontSize: 36, fontWeight: 'bold' }}>
-            {currencyFormatter(salary - 15833)}
+            {currencyFormatter(availableBalance)}
             <Paragraph strong type="warning">
-              - 12.33%
+              {increasePercentage > 0 ? '+' : '-'} {increasePercentage}%
             </Paragraph>
           </Text>
         </Paragraph>
@@ -96,13 +137,47 @@ const HomePage = () => {
       />
     </Space>
   );
+  const CardsChips = () => (
+    <Space
+      direction="vertical"
+      align="start"
+      className="home-card credit-cards-card"
+      style={{ backgroundColor: 'transparent', overflow: 'auto' }}
+    >
+      <Title level={2} style={{ textAlign: 'left' }}>
+        Cartões
+      </Title>
+      <Space direction="horizontal" size="small">
+        {user?.creditCards.map((card) => (
+          <Button
+            type="text"
+            key={card.id}
+            style={{
+              fontSize: '1.3rem',
+              padding: '0 0.5rem',
+              backgroundColor: 'rgb(204 204 204 / 30%)',
+            }}
+          >
+            {card.title}
+          </Button>
+        ))}
+      </Space>
+    </Space>
+  );
 
   return (
     <>
       <Header />
-      <Balance />
-      <Graph />
-      <Transactions />
+      {!user ? (
+        <>Carregando informações...</>
+      ) : (
+        <>
+          <Balance />
+          <Graph />
+          <CardsChips />
+          <Transactions />
+        </>
+      )}
     </>
   );
 };
