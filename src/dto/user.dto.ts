@@ -11,7 +11,7 @@ export default interface UserDTO {
   password: string;
   active: boolean;
   createdAt: Date;
-  salary?: number;
+  salary: number;
   creditCards: CreditCardDTO[];
   transactions: TransactionDTO[];
   recurringExpenses: RecurringExpenseDTO[];
