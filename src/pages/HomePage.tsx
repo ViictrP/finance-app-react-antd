@@ -1,12 +1,13 @@
 import './style.scss';
 import Header from '../components/Header.tsx';
 import { useUserSelector } from '../stores/slices/user.slice.ts';
-import { Button, Input, Space, Typography } from 'antd';
+import { Button, Input, List, Skeleton, Space, Typography } from 'antd';
 import { currencyFormatter } from '../helper';
 import Icon, { SearchOutlined } from '@ant-design/icons';
 import BalanceIcon from '../assets/balance.svg?react';
 import { MonthClosureDTO, RecurringExpenseDTO, TransactionDTO } from '../dto';
 import { useCallback, useEffect, useState } from 'react';
+import { translateCategory } from '../helper/category.helper.ts';
 
 const { Text, Paragraph, Title } = Typography;
 
@@ -135,6 +136,25 @@ const HomePage = () => {
         placeholder="filtrar transações..."
         prefix={<SearchOutlined />}
       />
+      <List
+        loading={!user}
+        itemLayout="horizontal"
+        dataSource={
+          user!.transactions.concat(
+            user!.recurringExpenses as TransactionDTO[]
+          ) ?? []
+        }
+        renderItem={(item) => (
+          <List.Item style={{ textAlign: 'left' }}>
+            <Skeleton avatar title={false} loading={!user} active>
+              <List.Item.Meta
+                title={item.description}
+                description={translateCategory(item.category)}
+              />
+            </Skeleton>
+          </List.Item>
+        )}
+      ></List>
     </Space>
   );
   const CardsChips = () => (
@@ -168,16 +188,12 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      {!user ? (
-        <>Carregando informações...</>
-      ) : (
-        <>
-          <Balance />
-          <Graph />
-          <CardsChips />
-          <Transactions />
-        </>
-      )}
+      <Skeleton title={true} loading={!user} active>
+        <Balance />
+        <Graph />
+        <CardsChips />
+        <Transactions />
+      </Skeleton>
     </>
   );
 };
