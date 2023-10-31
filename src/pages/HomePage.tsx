@@ -1,7 +1,7 @@
 import './style.scss';
 import Header from '../components/Header.tsx';
 import { useUserSelector } from '../stores/slices/user.slice.ts';
-import { Button, Skeleton, Space, Typography } from 'antd';
+import { Button, Space, Typography } from 'antd';
 import { currencyFormatter } from '../helper';
 import Icon from '@ant-design/icons';
 import BalanceIcon from '../assets/balance.svg?react';
@@ -152,15 +152,13 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      <Skeleton paragraph={true} title={true} loading={!user} active>
-        <Balance />
-        <Graph />
-        <CardsChips />
-        <Transactions
-          transactions={user?.transactions}
-          recurringExpenses={user?.recurringExpenses}
-        />
-      </Skeleton>
+      <Balance />
+      <Graph />
+      <CardsChips />
+      <Transactions
+        transactions={user?.transactions}
+        recurringExpenses={user?.recurringExpenses}
+      />
     </>
   );
 };
