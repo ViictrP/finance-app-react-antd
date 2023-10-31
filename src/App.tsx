@@ -26,10 +26,7 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signedIn, cookie.accessToken]);
 
-  if (
-    userStored.isLoadingProfile ||
-    (!userStored.profile && !userStored.profile)
-  ) {
+  if (userStored.isLoadingProfile) {
     return (
       <Space
         direction="vertical"
