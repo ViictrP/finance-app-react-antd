@@ -1,13 +1,13 @@
 import './style.scss';
 import Header from '../components/Header.tsx';
 import { useUserSelector } from '../stores/slices/user.slice.ts';
-import { Button, Input, List, Skeleton, Space, Typography } from 'antd';
+import { Button, Space, Typography } from 'antd';
 import { currencyFormatter } from '../helper';
-import Icon, { SearchOutlined } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
 import BalanceIcon from '../assets/balance.svg?react';
 import { MonthClosureDTO, RecurringExpenseDTO, TransactionDTO } from '../dto';
 import { useCallback, useEffect, useState } from 'react';
-import { translateCategory } from '../helper/category.helper.ts';
+import { Transactions } from '../components';
 
 const { Text, Paragraph, Title } = Typography;
 
@@ -121,42 +121,6 @@ const HomePage = () => {
       ))}
     </Space>
   );
-  const Transactions = () => (
-    <Space
-      direction="vertical"
-      align="start"
-      className="home-card transactions-card"
-      style={{ backgroundColor: 'transparent' }}
-    >
-      <Title level={2} style={{ textAlign: 'left' }}>
-        Transactions
-      </Title>
-      <Input
-        size="large"
-        placeholder="filtrar transações..."
-        prefix={<SearchOutlined />}
-      />
-      <List
-        loading={!user}
-        itemLayout="horizontal"
-        dataSource={
-          user!.transactions.concat(
-            user!.recurringExpenses as TransactionDTO[]
-          ) ?? []
-        }
-        renderItem={(item) => (
-          <List.Item style={{ textAlign: 'left' }}>
-            <Skeleton avatar title={false} loading={!user} active>
-              <List.Item.Meta
-                title={item.description}
-                description={translateCategory(item.category)}
-              />
-            </Skeleton>
-          </List.Item>
-        )}
-      ></List>
-    </Space>
-  );
   const CardsChips = () => (
     <Space
       direction="vertical"
@@ -188,12 +152,13 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      <Skeleton title={true} loading={!user} active>
-        <Balance />
-        <Graph />
-        <CardsChips />
-        <Transactions />
-      </Skeleton>
+      <Balance />
+      <Graph />
+      <CardsChips />
+      <Transactions
+        transactions={user?.transactions}
+        recurringExpenses={user?.recurringExpenses}
+      />
     </>
   );
 };

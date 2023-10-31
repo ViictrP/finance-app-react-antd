@@ -1,3 +1,4 @@
 import Header from './Header';
+import Transactions from './Transactions';
 
-export { Header };
+export { Header, Transactions };
