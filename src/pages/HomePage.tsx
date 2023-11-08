@@ -1,5 +1,4 @@
 import './style.scss';
-import Header from '../components/Header.tsx';
 import { useUserSelector } from '../stores/slices/user.slice.ts';
 import { Button, Space, Typography } from 'antd';
 import { currencyFormatter } from '../helper';
@@ -72,8 +71,8 @@ const HomePage = () => {
           <br />
           <Text style={{ fontSize: 36, fontWeight: 'bold' }}>
             {currencyFormatter(availableBalance)}
-            <Paragraph strong type="warning">
-              {increasePercentage > 0 ? '+' : '-'} {increasePercentage}%
+            <Paragraph strong type={increasePercentage > 0 ? 'success' : 'warning'}>
+              {increasePercentage}%
             </Paragraph>
           </Text>
         </Paragraph>
@@ -151,7 +150,6 @@ const HomePage = () => {
 
   return (
     <>
-      <Header />
       <Balance />
       <Graph />
       <CardsChips />
