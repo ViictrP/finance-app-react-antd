@@ -1,8 +1,9 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {HomePage, NotFoundPage} from '../pages';
 import {Header} from "../components";
+import {ReactNode} from "react";
 
-const SecuredPage = ({children}: { children: any }) => {
+const SecuredPage = ({children}: { children: ReactNode }) => {
   return (
     <>
       <Header/>
