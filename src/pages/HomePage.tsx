@@ -44,7 +44,7 @@ const HomePage = () => {
       const availableBalance = calculateAvailableBalance();
       setAvailableBalance(() => availableBalance);
       const lastMonthAvailableBalance =
-        user.monthClosures[user.monthClosures.length - 1].available;
+        user.monthClosures[user.monthClosures.length - 1]?.available || 0;
 
       const lastMonthAvailableBalanceDifference =
         availableBalance - lastMonthAvailableBalance;
@@ -71,7 +71,10 @@ const HomePage = () => {
           <br />
           <Text style={{ fontSize: 36, fontWeight: 'bold' }}>
             {currencyFormatter(availableBalance)}
-            <Paragraph strong type={increasePercentage > 0 ? 'success' : 'warning'}>
+            <Paragraph
+              strong
+              type={increasePercentage > 0 ? 'success' : 'warning'}
+            >
               {increasePercentage}%
             </Paragraph>
           </Text>
