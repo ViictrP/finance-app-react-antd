@@ -1,4 +1,4 @@
-import { LoginError } from '../../errors';
+import { LoginError } from '../../errors/login.error.ts';
 import { AuthUser } from '../../stores/slices/user.slice.ts';
 
 export default interface AuthContextData {

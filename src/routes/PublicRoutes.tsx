@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { LoginPage, NotFoundPage } from '../pages';
+import LoginPage from '../pages/LoginPage.tsx';
+import NotFoundPage from '../pages/NotFoundPage.tsx';
 
 const PublicRoutes = () => {
   return (

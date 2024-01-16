@@ -2,10 +2,10 @@ import './App.scss';
 import Routes from './routes';
 import { useAppDispatch } from './app/hook.ts';
 import { userApiActions, useUserSelector } from './stores/slices/user.slice.ts';
-import { useAuth } from './context/hooks';
+import useAuth from './context/hooks/use-auth.hook.ts';
 import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import { api } from './lib';
+import { api } from './lib/api.ts';
 import { Space, Spin, Typography } from 'antd';
 
 function App() {

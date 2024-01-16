@@ -16,10 +16,10 @@ import Icon, {
 import { useState } from 'react';
 import Panda from '../assets/panda.svg?react';
 import { LoginDTO } from '../dto';
-import { useAuth } from '../context/hooks';
+import useAuth from '../context/hooks/use-auth.hook.ts';
 import { AuthUser, userActions } from '../stores/slices/user.slice.ts';
 import { useAppDispatch } from '../app/hook.ts';
-import {useCookies} from "react-cookie";
+import { useCookies } from 'react-cookie';
 
 const LoginPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
