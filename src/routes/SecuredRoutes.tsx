@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HomePage from '../pages/HomePage.tsx';
 import NotFoundPage from '../pages/NotFoundPage.tsx';
-import { Header } from '../components';
+import { Header , BottomNav} from '../components';
 import { ReactNode } from 'react';
 
 const SecuredPage = ({ children }: { children: ReactNode }) => {
@@ -9,6 +9,7 @@ const SecuredPage = ({ children }: { children: ReactNode }) => {
     <>
       <Header />
       {children}
+      <BottomNav />
     </>
   );
 };
