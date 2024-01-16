@@ -1,6 +1,6 @@
 import { useCookies } from 'react-cookie';
 import AuthContext from './AuthContext.tsx';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useCallback, useEffect } from 'react';
 import {
   getAuth,
   GoogleAuthProvider,
@@ -43,9 +43,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       .finally(() => finallyCb && finallyCb());
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     removeCookie('accessToken');
-  };
+  }, []);
 
   useEffect(() => {
     api.interceptors.response.use(
