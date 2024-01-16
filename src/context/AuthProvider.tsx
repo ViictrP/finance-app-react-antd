@@ -45,7 +45,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = useCallback(() => {
     removeCookie('accessToken');
-  }, []);
+  }, [removeCookie]);
 
   useEffect(() => {
     api.interceptors.response.use(
