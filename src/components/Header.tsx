@@ -1,5 +1,5 @@
 import { Avatar, Button, Space } from 'antd';
-import { useAuth } from '../context/hooks';
+import useAuth from '../context/hooks/use-auth.hook.ts';
 import { useUserSelector } from '../stores/slices/user.slice.ts';
 import { useCookies } from 'react-cookie';
 

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store.ts';
 import { UserDTO } from '../../dto';
-import { getUserProfileThunk } from '../thunks';
+import getUserProfileThunk from '../thunks/getUserProfileThunk.ts';
 import { useSelector } from 'react-redux';
 
 export interface AuthUser {

@@ -1,10 +1,16 @@
-import {useCookies} from 'react-cookie';
+import { useCookies } from 'react-cookie';
 import AuthContext from './AuthContext.tsx';
-import {ReactNode} from 'react';
-import {getAuth, GoogleAuthProvider, signInWithPopup, UserCredential,} from 'firebase/auth';
-import {Catch, Finally, Then} from './data/auth-context.data.ts';
-import {LoginError} from '../errors';
-import {api} from "../lib";
+import { ReactNode, useCallback, useEffect } from 'react';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  UserCredential,
+} from 'firebase/auth';
+import { Catch, Finally, Then } from './data/auth-context.data.ts';
+import { LoginError } from '../errors/login.error.ts';
+import { api } from '../lib/api.ts';
+import { AxiosError } from 'axios';
 
 interface AuthUser {
   accessToken: string;
@@ -37,9 +43,20 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       .finally(() => finallyCb && finallyCb());
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     removeCookie('accessToken');
-  };
+  }, [removeCookie]);
+
+  useEffect(() => {
+    api.interceptors.response.use(
+      (response) => response,
+      (error: AxiosError) => {
+        if (error.response?.status === 401) {
+          logout();
+        }
+      }
+    );
+  }, [logout]);
 
   return (
     <AuthContext.Provider

@@ -1,12 +1,14 @@
 import './style.scss';
 import { useUserSelector } from '../stores/slices/user.slice.ts';
 import { Button, Space, Typography } from 'antd';
-import { currencyFormatter } from '../helper';
+import currencyFormatter from '../helper/currency.formatter.ts';
 import Icon from '@ant-design/icons';
 import BalanceIcon from '../assets/balance.svg?react';
-import { MonthClosureDTO, RecurringExpenseDTO, TransactionDTO } from '../dto';
+import { MonthClosureDTO } from '../dto';
 import { useCallback, useEffect, useState } from 'react';
 import { Transactions } from '../components';
+import calculateAvailableBalanceHelper from '../helper/calculate-available-balance.helper.ts';
+import { format } from 'date-fns';
 
 const { Text, Paragraph, Title } = Typography;
 
@@ -15,36 +17,19 @@ const HomePage = () => {
   const [increasePercentage, setIncreasePercentage] = useState<number>(0);
   const { profile: user } = useUserSelector();
   const salary = Number(user?.salary);
+  const today = new Date();
 
-  const calculateAvailableBalance = useCallback(() => {
-    const { creditCards, recurringExpenses, transactions } = user!;
-    const transactionsTotal = transactions.reduce(reduceIntoTotal, 0);
-    const recurringExpensesTotal = recurringExpenses.reduce(reduceIntoTotal, 0);
-    const creditCardsTotal = creditCards.reduce((sum, current) => {
-      const invoice = current.invoices[0];
-      const amount = invoice
-        ? invoice.transactions.reduce((sum, current) => {
-            return sum + Number(current.amount);
-          }, 0)
-        : 0;
-      return sum + Number(amount);
-    }, 0);
-    return (
-      salary - creditCardsTotal - recurringExpensesTotal - transactionsTotal
-    );
-  }, [salary, user]);
-
-  const reduceIntoTotal = (
-    acc: number,
-    curr: TransactionDTO | RecurringExpenseDTO
-  ) => acc + Number(curr.amount);
+  const calculateAvailableBalance = useCallback(
+    () => calculateAvailableBalanceHelper(user),
+    [user]
+  );
 
   useEffect(() => {
     if (user) {
       const availableBalance = calculateAvailableBalance();
       setAvailableBalance(() => availableBalance);
       const lastMonthAvailableBalance =
-        user.monthClosures[user.monthClosures.length - 1].available;
+        user.monthClosures[user.monthClosures.length - 1]?.available || 0;
 
       const lastMonthAvailableBalanceDifference =
         availableBalance - lastMonthAvailableBalance;
@@ -69,16 +54,22 @@ const HomePage = () => {
         <Paragraph type="secondary" style={{ textAlign: 'left', fontSize: 20 }}>
           Saldo do mês
           <br />
-          <Text style={{ fontSize: 36, fontWeight: 'bold' }}>
+          <Text
+            style={{ fontSize: 36, fontWeight: 'bold' }}
+            type={availableBalance > 0 ? 'success' : 'danger'}
+          >
             {currencyFormatter(availableBalance)}
-            <Paragraph strong type={increasePercentage > 0 ? 'success' : 'warning'}>
+            <Paragraph
+              strong
+              type={increasePercentage > 0 ? 'success' : 'danger'}
+            >
               {increasePercentage}%
             </Paragraph>
           </Text>
         </Paragraph>
         <Space align="center">
           <Text strong style={{ fontSize: 16 }}>
-            SET
+            {format(today, 'MMM').toUpperCase()}
           </Text>
           <Icon
             onClick={() => console.log('set')}
@@ -101,7 +92,13 @@ const HomePage = () => {
           }}
         />
         <div>
-          <Text strong>{monthClosure.month}</Text> <br />
+          <Text strong>
+            {monthClosure.month}
+            <small style={{ paddingLeft: '0.8px' }}>
+              <small>{monthClosure.year}</small>
+            </small>
+          </Text>{' '}
+          <br />
           <Text strong>
             {(Number(monthClosure.expenses) / 1000).toFixed(2)}k
           </Text>
@@ -121,31 +118,46 @@ const HomePage = () => {
     </Space>
   );
   const CardsChips = () => (
-    <Space
-      direction="vertical"
-      align="start"
-      className="home-card credit-cards-card"
-      style={{ backgroundColor: 'transparent', overflow: 'auto' }}
-    >
-      <Title level={2} style={{ textAlign: 'left' }}>
-        Cartões
-      </Title>
-      <Space direction="horizontal" size="small">
-        {user?.creditCards.map((card) => (
-          <Button
-            type="text"
-            key={card.id}
-            style={{
-              fontSize: '1.3rem',
-              padding: '0 0.5rem',
-              backgroundColor: 'rgb(204 204 204 / 30%)',
-            }}
-          >
-            {card.title}
-          </Button>
-        ))}
+    <>
+      <Space
+        size="small"
+        direction="vertical"
+        align="start"
+        className="home-card credit-cards-card"
+        style={{
+          backgroundColor: 'transparent',
+          overflow: 'hidden',
+          marginBottom: 0,
+          paddingBottom: 0,
+        }}
+      >
+        <Title level={2} style={{ textAlign: 'left' }}>
+          Cartões
+        </Title>
       </Space>
-    </Space>
+      <Space
+        direction="vertical"
+        align="start"
+        className="home-card credit-cards-card"
+        style={{ backgroundColor: 'transparent', overflow: 'auto' }}
+      >
+        <Space direction="horizontal" size="small">
+          {user?.creditCards.map((card) => (
+            <Button
+              type="text"
+              key={card.id}
+              style={{
+                fontSize: '1.3rem',
+                padding: '0 0.5rem',
+                backgroundColor: 'rgb(204 204 204 / 30%)',
+              }}
+            >
+              {card.title}
+            </Button>
+          ))}
+        </Space>
+      </Space>
+    </>
   );
 
   return (
