@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import '../window.mock';
+import '../mock/window.mock';
 import { fireEvent, render } from '@testing-library/react';
 import { Header } from '../../src/components';
 import { AuthUser, useUserSelector } from '../../src/stores/slices/user.slice';
