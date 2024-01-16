@@ -8,12 +8,14 @@ import { Provider } from 'react-redux';
 import { store } from '../../src/stores/store';
 import { ReactNode } from 'react';
 
-jest.mock('../../src/context/hooks', () => ({ useAuth: jest.fn() }));
+jest.mock('../../src/components/Transactions.tsx', jest.fn());
+jest.mock('../../src/context/hooks/use-auth.hook', () => jest.fn());
 const mockUseAuth = useAuth as jest.Mock;
 
 jest.mock('../../src/stores/slices/user.slice', () => ({
   useUserSelector: jest.fn(),
 }));
+
 const useUserSelectMock = useUserSelector as jest.Mock;
 
 afterEach(() => jest.clearAllMocks());
