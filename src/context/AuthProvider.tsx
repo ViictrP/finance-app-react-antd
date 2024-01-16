@@ -19,17 +19,6 @@ interface AuthUser {
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
 
-  useEffect(() => {
-    api.interceptors.response.use(
-      (response) => response,
-      (error: AxiosError) => {
-        if (error.response?.status === 401) {
-          logout();
-        }
-      }
-    );
-  }, []);
-
   const authenticate = (
     thenCb?: Then,
     catchCb?: Catch,
@@ -57,6 +46,17 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     removeCookie('accessToken');
   };
+
+  useEffect(() => {
+    api.interceptors.response.use(
+      (response) => response,
+      (error: AxiosError) => {
+        if (error.response?.status === 401) {
+          logout();
+        }
+      }
+    );
+  }, [logout]);
 
   return (
     <AuthContext.Provider
